@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Traffic Analyzer</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #00c6ff, #0072ff); /* Beautiful blue gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        /* Card container styles */
+        .card {
+            background: #1c1c1c; /* Darker card color */
+            border-radius: 12px;
+            padding: 40px;
+            width: 320px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-10px); /* Hover effect for card */
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #00c6ff; /* Accent color */
+            text-transform: uppercase;
+        }
+
+        .stats {
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .stats span {
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        /* Adding some smooth hover animations for the stats */
+        .stats p {
+            transition: color 0.3s ease-in-out;
+        }
+
+        .stats p:hover {
+            color: #00c6ff; /* Change color on hover */
+        }
+
+        /* Media query for responsiveness */
+        @media (max-width: 768px) {
+            .card {
+                padding: 20px;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const response = await fetch('/api/network-stats');
+            const data = await response.json();
+            document.getElementById('received').textContent = data.bytes_recv;
+            document.getElementById('download-speed').textContent = data.download_speed;
+            document.getElementById('sent').textContent = data.bytes_sent;
+            document.getElementById('upload-speed').textContent = data.upload_speed;
+        }
+        
+        // Fetch data every second
+        setInterval(fetchData, 1000);
+        
+        // Fetch data once on page load
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <div class="card">
+        <h1>Network Traffic Analyzer</h1>
+        <div class="stats">
+            <p>Received: <span id="received">Loading...</span></p>
+            <p>Download Speed: <span id="download-speed">Loading...</span></p>
+            <p>Sent: <span id="sent">Loading...</span></p>
+            <p>Upload Speed: <span id="upload-speed">Loading...</span></p>
+        </div>
+    </div>
+</body>
+</html>
